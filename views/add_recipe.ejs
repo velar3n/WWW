@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Yummy</title>
+        <link rel="icon" href="/images/logo_hat.png" type="image/x-icon">
+        <link rel="stylesheet" href="/stylesheets/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+
+
+    <body>
+        <!-- header with logo + navbar + searchbar + login -->
+        <div class="header">
+            <div class="navbar_container">
+                <a href="/" aria-current="page" class="navbar_logo" id="navbar_logo">
+                    <img src="images/logo.png" loading="lazy">
+                </a>
+                <nav class="navbar" id="navbar">
+                    <a href="/">Home</a>
+                    <a href="/recipes">Recipes</a>
+                    <a href="/contact">Contact</a>
+                </nav>
+                <div class="navbuttons" id="navbuttons">
+                    <button class="login_btn hidden" onclick="window.location.href='/add_recipe';">Add recipe</button>
+                    <div class="fa fa-bars" id="menu_btn" onclick="showMenu()"></div>
+                </div>
+                <nav class="navbar2" id="navbar2">
+                    <a href="/">Home</a>
+                    <a href="/recipes">Recipes</a>
+                    <a href="/contact">Contact</a>
+                    <a href="/add_recipe" class="hidden_menu">Add recipe</a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- main site -->
+        <div class="main">
+            <div class="login_box">
+                <div class="login_container">
+                    <h2>Add a recipe<strong>.</strong></h2>
+                    <form class="login_form" id="login_formID" action="/add_recipe/add" method="post" enctype="multipart/form-data">
+
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" required oninvalid= "{this.setCustomValidity('Required field')}" oninput="this.setCustomValidity('')">
+
+                        <label for="category">Category</label>
+                        <select name="category" id="category" required>
+                            <option hidden disabled selected value value="select"></option>
+                            <option disabled="true" value="select">Select a category</option>
+                            <option value="Main">Main</option>
+                            <option value="Appetizer">Appetizer</option>
+                            <option value="Dessert">Dessert</option>
+                            <option value="Drinks">Drinks</option>
+                            <option value="Snacks">Snacks</option>
+                        </select>
+
+
+                        <label for="time">Total time [min]</label>
+                        <input type="text" id="time" name="time" pattern="[0-9]+$" required oninvalid="if (this.value!=''){this.setCustomValidity('Invalid time')} else {this.setCustomValidity('Required field')}" oninput="this.setCustomValidity('')">
+
+                        <label for="portions">Portions</label>
+                        <input type="text" id="portions" name="portions" pattern="[0-9]+$" required oninvalid="if (this.value!=''){this.setCustomValidity('Invalid time')} else {this.setCustomValidity('Required field')}" oninput="this.setCustomValidity('')">
+
+
+                        <label for="difficulty">Difficulty</label>
+                        <select name="difficulty" id="difficulty" required>
+                            <option hidden disabled selected value value="select"></option>
+                            <option disabled="true" value="select">Select a difficulty</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+
+                        <div class="add_container">
+                            <div class="add_container_child">
+                                <label for="ingredients">Ingredients</label>
+                                <div class="add_ingr_line" id="add_ingr_line">
+                                    <div>
+                                        <input type="text" name="ingredients" id="ingredients" required oninvalid="if (this.value!=''){this.setCustomValidity('Invalid input')}" oninput="this.setCustomValidity('')">
+                                    </div>
+                                </div>
+                                <button type="button" class="add_btn" onclick="addLine()">Add ingredient</button>
+                                <button type="button" class="remove_btn" onclick="removeLine()">Remove ingredient</button>           
+                            </div>
+
+                            <div class="add_container_child">
+                                <label for="fdescription" id="description">Step-by-step description</label>
+                                <div class="add_desc_line" id="add_desc_line">
+                                    <div>
+                                        <textarea id="description" name="description" required oninvalid="if (this.value!=''){this.setCustomValidity('Invalid input')}" oninput="this.setCustomValidity('')"></textarea>
+                                    </div>
+                                </div>
+                                <button type="button" class="add_btn" onclick="addLineD()">Add step</button>
+                                <button type="button" class="remove_btn" onclick="removeLineD()">Remove step</button>
+                            </div>
+                        </div>
+
+                        <label for="photo">Image</label>
+                        <input type="file" id="photo" name="photo" required="true" form="login_formID" accept="image/*" oninvalid="{this.setCustomValidity('File required')}" oninput="this.setCustomValidity('')">
+
+                        <div class="button_container_bg">
+                            <button class="login_btn" type="submit">Add recipe</button> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- footer -->
+        <div class="footer">
+            <div class="socials">
+                <a href="https://www.facebook.com/?locale=pl_PL" class="fa fa-facebook"></a>
+                <a href="https://www.instagram.com/" class="fa fa-instagram"></a>
+                <a href="https://twitter.com/?lang=pl" class="fa fa-twitter"></a>
+            </div>
+            <div class="creator">
+                ©2024 Created by <span>Natalia Kiełbasa</span> | All rights reserved
+            </div>
+        </div>
+
+        <script>
+            
+            var ingr = 1;
+            function addLine() {
+                ingr++;
+                var objTo = document.getElementById('add_ingr_line');
+                var divtest = document.createElement("div");
+                
+                divtest.innerHTML = '<input type="text" id="ingredients" name="ingredients" required">';
+            
+                objTo.appendChild(divtest)
+            }
+            function removeLine() {
+                if (ingr == 1) {
+                    return;
+                }
+                ingr--;
+                var element = document.getElementById('add_ingr_line');
+                element.removeChild(element.lastChild);
+            }
+
+            var desc = 1;
+            function addLineD() {
+                desc++;
+                var objTo = document.getElementById('add_desc_line');
+                var divtest = document.createElement("div");
+                
+                divtest.innerHTML = '<textarea type="text" id="description" name="description" required"></textarea>';
+            
+                objTo.appendChild(divtest)
+            }
+            function removeLineD() {
+                if (desc == 1) {
+                    return;
+                }
+                desc--;
+                var element = document.getElementById('add_desc_line');
+                element.removeChild(element.lastChild);
+            }
+
+            function showMenu() {
+                document.getElementById('navbar_logo').style.display = 'none';
+                document.getElementById('navbar').style.display = 'none';
+                document.getElementById('navbuttons').style.display = 'none';
+                document.getElementById('navbar2').style.display = 'flex';
+            }
+        </script>
+    </body>
+</html>
